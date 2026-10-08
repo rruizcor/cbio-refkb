@@ -21,6 +21,7 @@ def main(argv: list[str] | None = None) -> None:
     b.add_argument("--out", default="builds", type=Path)
     b.add_argument("--min-normal-depth", default=10, type=int)
     b.add_argument("--threads", default=None, type=int)
+    b.add_argument("--memory-limit", default=None, help="DuckDB RAM cap, e.g. 12GB (spills to disk beyond it)")
 
     q = sub.add_parser("query", help="Run ad hoc SQL against a fetched snapshot (views per table)")
     q.add_argument("snapshot_dir", type=Path)
@@ -36,7 +37,8 @@ def main(argv: list[str] | None = None) -> None:
     elif args.cmd == "build":
         from .build import build
 
-        out = build(args.snapshot_dir, args.out, min_normal_depth=args.min_normal_depth, threads=args.threads)
+        out = build(args.snapshot_dir, args.out, min_normal_depth=args.min_normal_depth,
+                    threads=args.threads, memory_limit=args.memory_limit)
         print(f"Build written to {out}")
     elif args.cmd == "query":
         from .build import connect

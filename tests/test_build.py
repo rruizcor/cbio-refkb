@@ -136,3 +136,8 @@ def test_profiles_and_manifest(snapshot, tmp_path):
     m = json.loads((out / "build_manifest.json").read_text())
     assert m["snapshot_id"] == "abc123"
     assert m["outputs"]["variant_recurrence"]["rows"] > 0
+
+
+def test_memory_limit_option(snapshot, tmp_path):
+    out = build(snapshot, tmp_path / "builds", memory_limit="1GB", threads=2)
+    assert (out / "variant_recurrence.parquet").exists()

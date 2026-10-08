@@ -73,11 +73,20 @@ def fetch(
         "metadata_files": {},
     }
 
+    # Download straight into a staging folder on the same filesystem and move
+    # into place, so files are not also kept in the global HF cache (that would
+    # double disk use on small cloud VMs).
+    staging = snap_dir / ".download"
+
+    def _get(repo_path: str, dest: Path) -> None:
+        p = Path(hf_hub_download(HF_REPO, repo_path, repo_type="dataset", revision=sha,
+                                 token=token, local_dir=staging))
+        p.replace(dest)
+
     for meta in METADATA_FILES:
         if meta in all_files:
-            p = Path(hf_hub_download(HF_REPO, meta, repo_type="dataset", revision=sha, token=token))
             dest = snap_dir / meta
-            shutil.copyfile(p, dest)
+            _get(meta, dest)
             record["metadata_files"][meta] = _sha256(dest)
 
     missing = []
@@ -90,10 +99,11 @@ def fetch(
         tdir.mkdir(exist_ok=True)
         record["tables"][table] = []
         for i, f in enumerate(files):
-            p = Path(hf_hub_download(HF_REPO, f, repo_type="dataset", revision=sha, token=token))
             dest = tdir / f"part-{i:05d}.parquet"
-            shutil.copyfile(p, dest)
+            _get(f, dest)
             record["tables"][table].append({"source": f, "file": dest.name, "sha256": _sha256(dest)})
+
+    shutil.rmtree(staging, ignore_errors=True)
 
     if missing:
         raise RuntimeError(

@@ -31,7 +31,13 @@ def connect(snapshot_dir: Path, db_path: str = ":memory:", tables: list[str] | N
     return con
 
 
-def build(snapshot_dir: Path, out_root: Path, min_normal_depth: int = 10, threads: int | None = None) -> Path:
+def build(
+    snapshot_dir: Path,
+    out_root: Path,
+    min_normal_depth: int = 10,
+    threads: int | None = None,
+    memory_limit: str | None = None,
+) -> Path:
     snapshot_dir = Path(snapshot_dir)
     min_normal_depth = int(min_normal_depth)
     fetch_manifest_path = snapshot_dir / "fetch_manifest.json"
@@ -44,6 +50,11 @@ def build(snapshot_dir: Path, out_root: Path, min_normal_depth: int = 10, thread
     con = connect(snapshot_dir)
     if threads:
         con.execute(f"SET threads = {int(threads)}")
+    if memory_limit:
+        # Cap RAM so large joins spill to disk instead of being killed.
+        con.execute("SET memory_limit = ?", [memory_limit])
+        spill = (out_dir / ".duckdb_tmp").as_posix()
+        con.execute("SET temp_directory = ?", [spill])
 
     outputs = {}
 
