@@ -144,7 +144,7 @@ Counts are distinct patients over the shared (tumor type, gene) denominator, sum
 No column-level schema mismatches. The fetch matcher handled the `data/<table>.parquet` layout and all tests passed at the start. The changes were needed for the build to run at all and for the values in the real data:
 
 1. **`recurrence.sql` restructured.**
-   - **Before:** the original was killed by the kernel OOM killer at `--memory-limit 12GB`. In test runs it filled ~30 GB of disk while spilling. DuckDB's cap was not the limit; the time went to:
+   - **Before:** the original was killed by the kernel OOM killer at `--memory-limit 12GB`. In test runs it filled ~30 GB of disk while spilling. DuckDB's cap was not the problem; the memory and spill went to:
      - a `COUNT(DISTINCT)` over **225M** patient×panel-gene rows for panel denominators;
      - five `COUNT(DISTINCT patient) FILTER` aggregates;
      - `mode()`/`median()` heap state across 20M groups. That memory is outside DuckDB's cap and is never spilled.
