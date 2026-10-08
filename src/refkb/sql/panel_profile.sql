@@ -9,7 +9,7 @@ GROUP BY gene_panel_id
 UNION ALL
 
 SELECT 'mutated_sample_without_panel_row', NULL, count(DISTINCT sb.sample_unique_id)
-FROM mutation_derived m
+FROM mutations m
 JOIN samples_base sb ON sb.study_id = m.studyId AND sb.sample_stable_id = m.sampleId
 WHERE sb.sample_unique_id NOT IN (
     SELECT sample_unique_id FROM sample_to_gene_panel_derived WHERE alteration_type = 'MUTATION_EXTENDED'

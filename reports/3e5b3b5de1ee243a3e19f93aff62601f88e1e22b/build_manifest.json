@@ -1,0 +1,27 @@
+{
+  "refkb_version": "0.1.0",
+  "built_at_utc": "2026-10-08T14:04:32.884966+00:00",
+  "snapshot_id": "3e5b3b5de1ee243a3e19f93aff62601f88e1e22b",
+  "source": "cBioPortal/publicDatabase",
+  "params": {
+    "min_normal_depth": 10
+  },
+  "outputs": {
+    "germline_profile_by_study": {
+      "file": "germline_profile_by_study.parquet",
+      "rows": 542
+    },
+    "panel_profile": {
+      "file": "panel_profile.parquet",
+      "rows": 53
+    },
+    "variant_recurrence": {
+      "file": "variant_recurrence.parquet",
+      "rows": 20456158
+    }
+  },
+  "notes": [
+    "Coordinates are as deposited (mixed GRCh37/GRCh38, see 'build' column); liftover is not yet applied.",
+    "Annotation resource only: not a filter, not a validation truth set, not an actionability knowledgebase."
+  ]
+}

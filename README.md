@@ -21,6 +21,9 @@ Key definitions:
 - **Tumor type**: sample-level `ONCOTREE_CODE` when available, else the study's `type_of_cancer_id` (upper-cased).
 - **Denominator**: distinct patients whose sequencing covered the gene. `WES` samples cover all genes; panel samples only their panel genes; patients with both are counted once.
 - **Normal-confirmed somatic**: not germline-flagged, `normalAltCount = 0`, `normalRefCount >= --min-normal-depth` (default 10).
+- **Input cleaning** (`sql/mutations.sql`): uncalled profiles (`*_mutations_uncalled`) are dropped; chromosomes `23`/`24` become `X`/`Y`;
+  build aliases are normalized; negative read counts, and normals with zero depth or only one of ref/alt, count as missing.
+- **`median_tumor_vaf`**: median over patients of each patient's mean VAF for the variant.
 
 ## Usage
 

@@ -19,7 +19,7 @@ SELECT
     count(*) FILTER (WHERE lower(coalesce(m.mutationStatus,'')) <> 'germline'
                        AND m.normalAltCount > 0)                     AS n_somatic_with_normal_alt_reads,
     string_agg(DISTINCT coalesce(m.ncbiBuild, 'NA'), ',')            AS ncbi_builds
-FROM mutation_derived m
+FROM mutations m
 LEFT JOIN cancer_study cs ON cs.cancer_study_identifier = m.studyId
 GROUP BY m.studyId
 ORDER BY n_germline DESC, pct_with_normal_counts DESC, n_mutation_records DESC;
