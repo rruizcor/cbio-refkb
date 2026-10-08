@@ -1,0 +1,7 @@
+id_family,n_study_patients,n_persons,inflation,n_studies
+total,355690,152543,2.33,542
+MSK-DMP,237701,63349,3.75,127
+study-scoped,73602,73602,1.0,311
+TCGA,38321,10960,3.5,128
+TARGET,4244,3356,1.26,12
+CPTAC,1822,1276,1.43,12

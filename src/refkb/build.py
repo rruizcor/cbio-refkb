@@ -28,6 +28,7 @@ def connect(snapshot_dir: Path, db_path: str = ":memory:", tables: list[str] | N
         glob = str(tdir / "*.parquet").replace("'", "''")
         con.execute(f"CREATE OR REPLACE VIEW {table} AS SELECT * FROM read_parquet('{glob}', union_by_name=true)")
     con.execute(_sql("samples.sql"))
+    con.execute(_sql("mutations.sql"))
     return con
 
 
