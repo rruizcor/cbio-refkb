@@ -1,0 +1,11 @@
+# Data never goes in git: it is large and carries its own (AGPL-3.0 + per-study) terms.
+data/
+builds/
+*.parquet
+*.duckdb
+*.duckdb.wal
+
+__pycache__/
+*.egg-info/
+.pytest_cache/
+.venv/
